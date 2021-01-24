@@ -140,3 +140,21 @@ class ActivationLayer(Layer):
     # learning_rate is not used because there is no "learnable" parameters.
     def backward_propagation(self, output_error, learning_rate):
         return self.activation_derivative(self.input) * output_error  # dE/dX = dE/dY * activation_derivative(X)
+
+
+class SoftmaxLayer(Layer):
+    def __init__(self, input_size):
+        super().__init__()
+        self.input_size = input_size
+
+    def forward_propagation(self, input):
+        self.input = input
+        tmp = np.exp(input)
+        self.output = tmp / np.sum(tmp)
+        return self.output
+
+    def backward_propagation(self, output_error, learning_rate):
+        input_error = np.zeros(output_error.shape)
+        out = np.tile(self.output.T, self.input_size) # repeat out.T by input_size times
+        return self.output * np.dot(output_error, np.identity(self.input_size) - out)
+
