@@ -1,6 +1,5 @@
 import numpy as np
-from layers import *
-import activations
+from activations import softmax
 
 
 def mse(y, y_hat, x):  # Mean Square Error Loss
@@ -37,22 +36,20 @@ def hinge_derivative(y, y_hat, x):
 
 
 def crossentropy(y, y_hat, x):  # negative log likelihood
-    probs = activations.softmax(y_hat)
+    probs = softmax(y_hat)
     log_probs = -np.log([probs[i, y_hat[i]] for i in range(len(probs))])
     loss = np.mean(log_probs)
     return loss
 
 
 def crossentropy_derivative(y, y_hat, x):
-    probs = activations.softmax(y_hat)
+    probs = softmax(y_hat)
     ones = np.zeros_like(probs)
     for i, j in enumerate(y_hat):
         ones[i, j] = 1.0
 
     grads = (probs - ones) / float(len(y))
     return grads
-    # dl/dy_hat = dl/dsoftmax(y_hat) * dsoftmax(y_hat)/dy_hat
-    # https://ljvmiranda921.github.io/notebook/2017/08/13/softmax-and-the-negative-log-likelihood/
 
 
 def log_likelihood_identity(y, y_hat, x):  # for logistic regression with identity activation function
@@ -74,3 +71,4 @@ def log_likelihood_sigmoid(y, y_hat, x):  # for logistic regression with sigmoid
 def log_likelihood_sigmoid_derivative(y, y_hat, x):
     grads = -np.sign(y/2 + y_hat - 0.5) / np.abs(y/2 + y_hat - 0.5)
     return grads
+
