@@ -20,18 +20,17 @@ net.add_layer(ActivationLayer(tanh, tanh_derivative))
 
 # train
 net.set_loss(mse, mse_derivative)
-error_per_epoch = net.train(x_train, y_train, epochs=35, learning_rate=0.1)
+error_per_epoch, accuracy_per_epoch = net.train(x_train, y_train, epochs=1000, learning_rate=0.1)
 
 
 # test
 out = net.predict_output(x_train)
-print(out)
+out_decoded = label_decoder(out)
+print(out, end="\n")
+print(out_decoded)
 
-
-# visualize error per each epoch
-epochs = 35
-draw([k+1 for k in range(epochs)], error_per_epoch, 'Epochs', 'Error')
 
 # save model
 model = [x_train, y_train, out]
-save_model('D:/Projects/PyloXyloto/saved models', 'xor_fc', model)
+save_model('D:/Projects/PyloXyloto/models', 'xor_fc', model)
+
