@@ -32,9 +32,6 @@ class Network:
                 output = x_train[j]
                 for layer in self.layers:
                     output = layer.forward_propagation(output)
-                    # out_list = list(output[0])
-
-                # predicted.append(out_list)
 
                 # compute loss
                 err += self.loss(y_train[j], output, x_train[j])
